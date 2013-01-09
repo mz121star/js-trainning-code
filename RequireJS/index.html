@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <script data-main="scripts/Welcome"  src="scripts/require.js"></script>
+</head>
+<body>
+  <script type="text/javascript">
+      require.config({
+          baseUrl:"scripts",
+          paths: {
+              "jquery": "./js/jquery-1.7"
+          }
+      });
+
+      require(["Welcome"],function(w){
+         window.W=w;
+      })
+  </script>
+</body>
+</html>
+
