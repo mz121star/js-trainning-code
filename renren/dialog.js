@@ -13,65 +13,72 @@
             alert:"alert",
             prompt:"prompt"
         },
-        generator = function (type, okcallback, cancelcallback) {
-            var _mask = document.createElement("div");
-            var _win = document.createElement("div");
-            var _btn = document.createElement("input");
-            var _cancel;
-            var _promptcontent;
-            var _msg = document.createElement("span");
-            _mask.id = "win_mask"
-            _win.id = "win_dialog";
-            _btn.type = "button";
-            _btn.value = "OK";
-
-
-            if (type === type.confirm) {
-                _cancel = document.createElement("input");
-                _cancel.type = "button";
-                _cancel.value = "Cancel";
+        ondrag=function(){
+            var posX;
+            var posY;
+            fdiv = document.getElementById("win_dialog");
+            fdiv.style.left
+            console.log("drag");
+            document.getElementById("win_dialog").onmousedown=function(e)
+            {
+                console.log("ondrag");
+                if(!e) e = window.event;  //IE
+                posX = e.clientX - parseInt(fdiv.offsetLeft);
+                posY = e.clientY - parseInt(fdiv.offsetTop);
+                document.onmousemove = mousemove;
             }
-            if (type === type.prompt) {
-                _promptcontent = document.createElement("input");
-                _promptcontent.type = "text";
-                _promptcontent.id = "win_dialog_prompt_text";
+            document.onmouseup = function()
+            {
+                document.onmousemove = null;
+            }
+            function mousemove(ev)
+            {
+                console.log(ev);
+                if(ev==null) ev = window.event;//IE
+                fdiv.style.left = (ev.clientX - posX) + "px";
+                fdiv.style.top = (ev.clientY - posY) + "px";
             }
 
-            _msg.innerHTML = msg;
-            _win.appendChild(_msg);
-            _win.appendChild(_btn);
-            _mask.appendChile(_win);
-            document.body.appendChild(_mask);
-            return _mask;
-        };
+        }
+
     _dialog = {
         alert:function (msg) {
+            var _mask=document.createElement("div");
             var _win = document.createElement("div");
             var _btn = document.createElement("input");
             var _msg = document.createElement("span");
+            _mask.id="win_mask";
             _win.id = "win_dialog";
             _btn.type = "button";
             _btn.value = "OK";
             _msg.innerHTML = msg;
             _win.appendChild(_msg);
             _win.appendChild(_btn);
-            document.body.appendChild(_win);
+            _mask.appendChild(_win);
+            document.body.appendChild(_mask);
             _btn.onclick = function (e) {
                 var e = e || window.event;
                 if (!document.all) e.stopPropagation()
                 else window.event.cancelBubble = true
+                document.body.removeChild(_mask);
                 _win = null;
 
             }
-//            _btn.addEventListener("click", function () {
-//                this.parentNode.removeChild(_win);
-//            }, false);
+            if(typeof addEventListener!="undefined"){
+            _btn.addEventListener("click", function () {
+                if(_win)
+                this.parentNode.removeChild(_win);
+            }, false);
+            }
+            ondrag();
         },
         confirm:function (msg, callback) {
-            var _win = document.createElement("div"),
+            var _mask=document.createElement("div");
+                _win = document.createElement("div"),
                 _btn = document.createElement("input"),
                 _cancel = document.createElement("input"),
                 _msg = document.createElement("span");
+            _mask.id="win_mask";
             _win.id = "win_dialog";
             _btn.type = _cancel.type = "button";
             _btn.value = "OK";
@@ -80,10 +87,12 @@
             _win.appendChild(_msg);
             _win.appendChild(_btn);
             _win.appendChild(_cancel);
-            document.body.appendChild(_win);
+            _mask.appendChild(_win);
+            document.body.appendChild(_mask);
 
             _btn.onclick = function () {
-                this.parentNode.parentNode.removeChild(_win);
+                document.body.removeChild(_mask);
+                _win = null;
                 callback(true)
 
             }
@@ -93,7 +102,8 @@
 //            }, false);
 
             _cancel.onclick = function () {
-                this.parentNode.parentNode.removeChild(_win);
+                document.body.removeChild(_mask);
+                _win = null;
                 callback(false)
             }
 //            _cancel.addEventListener("click", function () {
@@ -108,3 +118,4 @@
     window.dialog = _dialog;
 
 })(window, undefined)
+
