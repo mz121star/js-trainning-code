@@ -1,0 +1,26 @@
+#win_dialog{
+    /*margin: 0 auto;*/
+    min-width: 200px;
+    min-height: 100px;
+    border: 1px solid #20b2aa;
+    background-color: #20b2aa;
+    clear: both;
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    position:absolute;
+    top:50%;
+    left:50%;
+    width:300px;
+    height:auto;
+    margin-top:-50px;
+    margin-left:-150px;
+}
+#win_dialog span{
+    display: block;
+}
+
+#win_dialog input{
+    display: inline-block;
+    bottom: 0px;
+}
